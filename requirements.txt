@@ -1,0 +1,10 @@
+selenium
+webdriver-manager
+pytest
+pytest-html
+requests
+jsonschema
+behave
+mysql-connector-python
+pymongo
+python-dotenv
