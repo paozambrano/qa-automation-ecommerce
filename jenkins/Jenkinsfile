@@ -1,5 +1,10 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'python:3.10' 
+            args '--cap-add=SYS_ADMIN'
+        }
+    }
     stages{
         stage('Checkout'){
             steps{checkout scm}
