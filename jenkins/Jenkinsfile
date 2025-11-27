@@ -4,8 +4,19 @@ pipeline {
         stage('Checkout'){
             steps{checkout scm}
         }
-        stage('Install'){
-            steps{sh 'python3 -m venv .venv && . .venv/bin/activate && pip install -r requirements.txt'}
+        stage('Install and Test'){
+            agent {
+                docker { 
+                    image 'python:3.10-slim' 
+                    args '-u root' 
+                }
+            }
+            steps {
+
+                sh 'pip install -r requirements.txt' 
+                sh 'pytest api-tests -q --tb=short --html=reports/api-report.html'
+                sh 'pytest ui-tests -q --tb=short --html=reports/ui-report.html'
+            }
         }
         stage('Run API tests'){
             steps{sh '. .venv/bin/activate && pytest api-tests -q --tb=short --html=reports/api-report.html'}
