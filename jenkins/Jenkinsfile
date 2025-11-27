@@ -5,17 +5,11 @@ pipeline {
             steps{checkout scm}
         }
         stage('Install and Test'){
-            agent {
-                docker { 
-                    image 'python:3.10-slim' 
-                    args '-u root' 
-                }
-            }
             steps {
-
-                sh 'pip install -r requirements.txt' 
-                sh 'pytest api-tests -q --tb=short --html=reports/api-report.html'
-                sh 'pytest ui-tests -q --tb=short --html=reports/ui-report.html'
+               
+                sh '/usr/bin/python3.8 -m venv .venv'
+                sh '. .venv/bin/activate && pip install -r requirements.txt'
+                sh '. .venv/bin/activate && pytest api-tests ...'
             }
         }
         stage('Run API tests'){
